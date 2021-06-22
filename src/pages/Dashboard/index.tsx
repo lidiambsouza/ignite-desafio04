@@ -29,7 +29,7 @@ function Dashboard({foods,editingFood,modalOpen,editModalOpen}:DashboardProps) {
         setStatus({...status, foods: response.data})
       )
        
-  }, []);
+  }, [status]);
   
 
   async function handleAddFood(food:Foods) {  
