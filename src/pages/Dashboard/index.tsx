@@ -11,8 +11,8 @@ import {Foods} from '../../types';
 interface DashboardProps{
   foods: Foods[];
   editingFood: Foods;
-  modalOpen: Boolean;
-  editModalOpen: Boolean;
+  modalOpen: boolean;
+  editModalOpen: boolean;
 }
 
 function Dashboard({foods,editingFood,modalOpen,editModalOpen}:DashboardProps) { 
@@ -29,7 +29,7 @@ function Dashboard({foods,editingFood,modalOpen,editModalOpen}:DashboardProps) {
         setStatus({...status, foods: response.data})
       )
        
-  }, [status]);
+  }, []);
   
 
   async function handleAddFood(food:Foods) {  
@@ -53,7 +53,7 @@ function Dashboard({foods,editingFood,modalOpen,editModalOpen}:DashboardProps) {
         { ...editingFood, ...food },
       );
 
-      const foodsUpdated = foods.map(f =>
+      const foodsUpdated = status.foods.map(f =>
         f.id !== foodUpdated.data.id ? f : foodUpdated.data,
       );
 
@@ -67,17 +67,17 @@ function Dashboard({foods,editingFood,modalOpen,editModalOpen}:DashboardProps) {
 
     await api.delete(`/foods/${id}`);
 
-    const foodsFiltered = foods.filter(food => food.id !== id);
+    const foodsFiltered = status.foods.filter(food => food.id !== id);
 
     setStatus({...status, foods: foodsFiltered});
   }
 
-  function toggleModal(){
-    setStatus({...status, modalOpen: !modalOpen});
+  function toggleModal(){      
+    setStatus({...status, modalOpen: !status.modalOpen});
   }
 
   function toggleEditModal(){
-    setStatus({...status, editModalOpen: !editModalOpen}!);
+    setStatus({...status, editModalOpen: !status.editModalOpen}!);
   }
 
   function handleEditFood(food:Foods){
@@ -86,22 +86,22 @@ function Dashboard({foods,editingFood,modalOpen,editModalOpen}:DashboardProps) {
 
   return (
       <>
-        <Header openModal={()=>toggleModal()} />
+        <Header openModal={toggleModal} />
         <ModalAddFood
-          isOpen={modalOpen}
-          setIsOpen={()=>toggleModal()}
+          isOpen={status.modalOpen}
+          setIsOpen={toggleModal}
           handleAddFood={(food:Foods)=>handleAddFood(food)}
         />
         <ModalEditFood
-          isOpen={editModalOpen}
-          setIsOpen={()=>toggleEditModal()}
-          editingFood={editingFood}
+          isOpen={status.editModalOpen}
+          setIsOpen={toggleEditModal}
+          editingFood={status.editingFood}
           handleUpdateFood={(food:Foods)=>handleUpdateFood(food)}
         />
 
         <FoodsContainer data-testid="foods-list">
-          {foods &&
-            foods.map(food => (
+          {status.foods &&
+            status.foods.map(food => (
               <Food
                 key={food.id}
                 foods={food}

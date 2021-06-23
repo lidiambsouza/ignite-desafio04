@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 interface ContainerProps{
-  available: Boolean
+  available: boolean
 }
 
 export const Container = styled.div<ContainerProps>`
@@ -16,8 +16,8 @@ export const Container = styled.div<ContainerProps>`
     text-align: center;
 
 
-    ${available =>
-    !available &&
+    ${props =>
+    !props.available &&
     css`
         opacity: 0.3;
       `};
