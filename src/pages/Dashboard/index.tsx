@@ -89,9 +89,7 @@ function Dashboard({foods,editingFood,modalOpen,editModalOpen}:DashboardProps) {
     setStatus(status=>({...status, modalOpen: !status.modalOpen}));
   }
 
-  function toggleEditModal(){  
-    // status.editModalOpen = !status.editModalOpen
-    // setStatus(status);
+  function toggleEditModal(){    
     setStatus(status=>({...status, editModalOpen: !status.editModalOpen}));         
   }
 
