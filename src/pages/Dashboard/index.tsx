@@ -33,7 +33,9 @@ function Dashboard({foods,editingFood,modalOpen,editModalOpen}:DashboardProps) {
           editModalOpen:false
         }
         setStatus(status)}
-      )
+      ).catch((error) => {
+        console.log(error);
+      });
      
        
   }, []);
@@ -47,7 +49,7 @@ function Dashboard({foods,editingFood,modalOpen,editModalOpen}:DashboardProps) {
         available: true,
       });
 
-      setStatus({...status, foods: [...status.foods, response.data]});
+      setStatus(status=>({...status, foods: [...status.foods, response.data]}));
     } catch (err) {
       console.log(err);
     }
@@ -64,43 +66,45 @@ function Dashboard({foods,editingFood,modalOpen,editModalOpen}:DashboardProps) {
         f.id !== foodUpdated.data.id ? f : foodUpdated.data,
       );
 
-      setStatus({...status, foods: foodsUpdated});
+      setStatus(status=>({...status, foods: foodsUpdated}));
     } catch (err) {
       console.log(err);
     }
   }
 
   async function handleDeleteFood(id:number) {    
+    try{
+      await api.delete(`/foods/${id}`);
 
-    await api.delete(`/foods/${id}`);
+      const foodsFiltered = status.foods.filter(food => food.id !== id);
 
-    const foodsFiltered = status.foods.filter(food => food.id !== id);
-
-    setStatus({...status, foods: foodsFiltered});
-  }
-
-  function toggleModal(){
-    // setStatus({...status, modalOpen: !status.modalOpen});
-    status.modalOpen = !status.modalOpen
-    setStatus(status);     
+    setStatus(status=>({...status, foods: foodsFiltered}));
+    } catch (err) {
+      console.log(err);
+    }
     
   }
 
+  function toggleModal(){
+    setStatus(status=>({...status, modalOpen: !status.modalOpen}));
+  }
+
   function toggleEditModal(){  
-    status.editModalOpen = !status.editModalOpen
-    setStatus(status);         
+    // status.editModalOpen = !status.editModalOpen
+    // setStatus(status);
+    setStatus(status=>({...status, editModalOpen: !status.editModalOpen}));         
   }
 
   function handleEditFood(food:Foods){
-    setStatus({ ...status, editingFood: food, editModalOpen: true });
+    setStatus(status=>({ ...status, editingFood: food, editModalOpen: true }));
   }  
 
   return (
       <>
-        <Header openModal={toggleModal} />
+        <Header openModal={()=>toggleModal()} />
         <ModalAddFood
           isOpen={status.modalOpen}
-          setIsOpen={toggleModal}
+          setIsOpen={()=>toggleModal()}
           handleAddFood={(food:Foods)=>handleAddFood(food)}
         />
         <ModalEditFood
