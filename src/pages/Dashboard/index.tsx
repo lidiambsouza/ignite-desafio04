@@ -25,9 +25,16 @@ function Dashboard({foods,editingFood,modalOpen,editModalOpen}:DashboardProps) {
   
   useEffect(() => {
     api.get('/foods')
-      .then(response => 
-        setStatus({...status, foods: response.data})
+      .then(response =>{
+        const status:DashboardProps = {
+          foods:[...response.data],
+          editingFood:{} as Foods,
+          modalOpen:false,
+          editModalOpen:false
+        }
+        setStatus(status)}
       )
+     
        
   }, []);
   
