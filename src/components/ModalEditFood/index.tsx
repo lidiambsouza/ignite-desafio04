@@ -15,8 +15,7 @@ interface ModalEditFoodProps{
 }
 
 function  ModalEditFood({isOpen, editingFood, setIsOpen, handleUpdateFood}:ModalEditFoodProps) {
-  const formRef = createRef<FormHandles>()
-  
+  const formRef = createRef<FormHandles>()  
 
   async function handleSubmit(data:Foods){
     handleUpdateFood(data);

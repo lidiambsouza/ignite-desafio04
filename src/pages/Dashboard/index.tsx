@@ -40,16 +40,16 @@ function Dashboard({foods,editingFood,modalOpen,editModalOpen}:DashboardProps) {
         available: true,
       });
 
-      setStatus({...status, foods: [...foods, response.data]});
+      setStatus({...status, foods: [...status.foods, response.data]});
     } catch (err) {
       console.log(err);
     }
   }
 
-  async function handleUpdateFood(food:Foods) {    
+  async function handleUpdateFood(food:Foods) {       
     try {
       const foodUpdated = await api.put(
-        `/foods/${editingFood.id}`,
+        `/foods/${status.editingFood.id}`,
         { ...editingFood, ...food },
       );
 
@@ -72,12 +72,16 @@ function Dashboard({foods,editingFood,modalOpen,editModalOpen}:DashboardProps) {
     setStatus({...status, foods: foodsFiltered});
   }
 
-  function toggleModal(){      
-    setStatus({...status, modalOpen: !status.modalOpen});
+  function toggleModal(){
+    // setStatus({...status, modalOpen: !status.modalOpen});
+    status.modalOpen = !status.modalOpen
+    setStatus(status);     
+    
   }
 
-  function toggleEditModal(){
-    setStatus({...status, editModalOpen: !status.editModalOpen}!);
+  function toggleEditModal(){  
+    status.editModalOpen = !status.editModalOpen
+    setStatus(status);         
   }
 
   function handleEditFood(food:Foods){
